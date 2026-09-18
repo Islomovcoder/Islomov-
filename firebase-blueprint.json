@@ -1,0 +1,190 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Product catalog item in the store",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "nameUz": { "type": "string", "maxLength": 256 },
+        "nameRu": { "type": "string", "maxLength": 256 },
+        "nameEn": { "type": "string", "maxLength": 256 },
+        "price": { "type": "number" },
+        "discountPrice": { "type": "number" },
+        "stock": { "type": "number" },
+        "categoryId": { "type": "string", "maxLength": 128 },
+        "images": { "type": "array" },
+        "sizes": { "type": "array" },
+        "colors": { "type": "array" },
+        "sku": { "type": "string", "maxLength": 64 },
+        "rating": { "type": "number" },
+        "reviewsCount": { "type": "number" },
+        "isPopular": { "type": "boolean" },
+        "isNew": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "nameUz", "price", "stock", "categoryId"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product category hierarchy",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "nameUz": { "type": "string", "maxLength": 128 },
+        "nameRu": { "type": "string", "maxLength": 128 },
+        "nameEn": { "type": "string", "maxLength": 128 },
+        "slug": { "type": "string", "maxLength": 128 },
+        "iconName": { "type": "string", "maxLength": 64 },
+        "image": { "type": "string", "maxLength": 1024 },
+        "subcategories": { "type": "array" }
+      },
+      "required": ["id", "nameUz", "slug"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer order placed in storefront",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 128 },
+        "customerPhone": { "type": "string", "maxLength": 32 },
+        "customerEmail": { "type": "string", "maxLength": 128 },
+        "shippingAddress": { "type": "object" },
+        "deliveryType": { "type": "string", "maxLength": 32 },
+        "paymentMethod": { "type": "string", "maxLength": 32 },
+        "paymentStatus": { "type": "string", "maxLength": 32 },
+        "status": { "type": "string", "maxLength": 32 },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "discountAmount": { "type": "number" },
+        "deliveryFee": { "type": "number" },
+        "total": { "type": "number" },
+        "promoCode": { "type": "string", "maxLength": 64 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "customerName", "customerPhone", "total", "status"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Customer profile and segmentation in CRM",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "email": { "type": "string", "maxLength": 128 },
+        "totalOrders": { "type": "number" },
+        "ordersCount": { "type": "number" },
+        "totalSpent": { "type": "number" },
+        "segment": { "type": "string", "maxLength": 32 },
+        "registeredAt": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "phone"]
+    },
+    "PromoCode": {
+      "title": "PromoCode",
+      "description": "Discount vouchers and promo campaigns",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "code": { "type": "string", "maxLength": 64 },
+        "type": { "type": "string", "maxLength": 32 },
+        "value": { "type": "number" },
+        "minOrderAmount": { "type": "number" },
+        "maxDiscount": { "type": "number" },
+        "expiresAt": { "type": "string", "maxLength": 64 },
+        "usageLimit": { "type": "number" },
+        "usageCount": { "type": "number" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "code", "type", "value", "active"]
+    },
+    "StoreSettings": {
+      "title": "StoreSettings",
+      "description": "Configuration settings of the store",
+      "type": "object",
+      "properties": {
+        "storeName": { "type": "string", "maxLength": 128 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "email": { "type": "string", "maxLength": 128 },
+        "address": { "type": "string", "maxLength": 256 },
+        "deliveryFee": { "type": "number" },
+        "freeDeliveryThreshold": { "type": "number" },
+        "uzcardHumoCard": { "type": "string", "maxLength": 64 },
+        "paymeMerchantId": { "type": "string", "maxLength": 64 },
+        "clickMerchantId": { "type": "string", "maxLength": 64 },
+        "workingHours": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["storeName", "phone", "email"]
+    },
+    "StaffMember": {
+      "title": "StaffMember",
+      "description": "Team staff and RBAC access roles",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 128 },
+        "role": { "type": "string", "maxLength": 32 },
+        "active": { "type": "boolean" },
+        "phone": { "type": "string", "maxLength": 32 },
+        "permissions": { "type": "array" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "email", "role", "active"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Designated administrator identity record",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Store products collection accessible to public and managed by admins"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Store categories collection accessible to public and managed by admins"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Customer orders created during checkout and managed by staff/admin"
+    },
+    "/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Customer profiles and statistics in store CRM"
+    },
+    "/promos/{promoId}": {
+      "schema": "PromoCode",
+      "description": "Discount coupons and promotional codes"
+    },
+    "/settings/{settingId}": {
+      "schema": "StoreSettings",
+      "description": "Global store preferences and delivery configurations"
+    },
+    "/staff/{staffId}": {
+      "schema": "StaffMember",
+      "description": "Store employees and role-based permissions"
+    },
+    "/admins/{adminUid}": {
+      "schema": "AdminRecord",
+      "description": "Designated administrator identities"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "SavdoHub — Onlayn Savdo Platformasi",
+  "description": "Professional onlayn savdo do'koni va admin boshqaruv paneli: kamera orqali mahsulot qo'shish, buyurtmalar, Payme/Click to'lovlar, ko'p tillilik.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

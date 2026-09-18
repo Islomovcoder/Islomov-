@@ -1,0 +1,100 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 0. Global Catch-All Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hardened Global Helpers
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email.lower() == 'abdulazizislomov0220@gmail.com' ||
+        (request.auth.token.email_verified == true && request.auth.token.email.lower() == 'abdulazizislomov0220@gmail.com') ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // 1. Products Collection
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(productId);
+    }
+
+    // 2. Categories Collection
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(categoryId);
+    }
+
+    // 3. Orders Collection
+    match /orders/{orderId} {
+      allow get: if isValidId(orderId);
+      allow list: if isAdmin();
+      allow create: if isValidId(orderId) &&
+        incoming().id == orderId &&
+        incoming().customerName is string && incoming().customerName.size() <= 128 &&
+        incoming().customerPhone is string && incoming().customerPhone.size() <= 32 &&
+        incoming().total is number && incoming().total >= 0 &&
+        incoming().status in ['new', 'preparing', 'shipping', 'delivered', 'cancelled'];
+      allow update: if isAdmin() && isValidId(orderId);
+      allow delete: if isAdmin() && isValidId(orderId);
+    }
+
+    // 4. Customers Collection
+    match /customers/{customerId} {
+      allow get, list: if isAdmin();
+      allow create, update: if isValidId(customerId) && (
+        isAdmin() || (
+          incoming().name is string && incoming().name.size() <= 128 &&
+          incoming().phone is string && incoming().phone.size() <= 32
+        )
+      );
+      allow delete: if isAdmin() && isValidId(customerId);
+    }
+
+    // 5. Promo Codes Collection
+    match /promos/{promoId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(promoId);
+    }
+
+    // 6. Settings Collection
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(settingId);
+    }
+
+    // 7. Staff & Team Collection
+    match /staff/{staffId} {
+      allow read, write: if isAdmin() && isValidId(staffId);
+    }
+
+    // 8. Admins Collection
+    match /admins/{adminUid} {
+      allow read: if isSignedIn() && isValidId(adminUid);
+      allow write: if isAdmin() && isValidId(adminUid);
+    }
+  }
+}
